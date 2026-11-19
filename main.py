@@ -220,3 +220,6 @@ def eliminar_producto(producto_id: int):
         "mensaje": "Producto eliminado",
         "producto": producto_id
     }
+#@app.post("/productos/{producto_id}")
+#def agregar_producto(producto_id: int):
+    
