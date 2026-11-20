@@ -138,19 +138,23 @@ class ProductoPatch(BaseModel):
 # ENDPOINTS
 # ============================================================
 
-@app.get("/productos")
-def obtener_productos():
-
-    # Leer el CSV desde GitHub
+@app.post("/productos")
+def crear_producto(producto: Producto):
+    # TODO:
+    # 1. Leer el CSV
     df, sha = get_csv()
+    if "id" not in df.columns:
+        nuevo_id = 1
+    else:
+        nuevo_id = int(df["id"].max()) + 1
+    nuevo_producto = producto.model_dump()  
+    nuevo_producto["id"] = nuevo_id
+    
+    df = pd.concat([df, pd.DataFrame([nuevo_producto])], ignore_index=True)
+    save_csv(df,sha)
 
-    # Convertir el DataFrame a una lista de diccionarios
-    productos = df.to_dict(orient="records")
-
-    return {
-        "productos": productos
-    }
-
+    return{"esto recibe el endpoint":producto}
+    
 @app.get("/productos/prueba")
 def prueba_guardado():
 
